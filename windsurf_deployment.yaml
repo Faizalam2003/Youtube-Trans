@@ -1,0 +1,53 @@
+# Windsurf Deployment Configuration
+
+# Project settings
+project:
+  name: youtube-video-summarizer
+  description: A full-stack application that generates AI-powered summaries of YouTube videos
+  framework: react
+  buildCommand: npm run build
+  outputDirectory: dist
+  installCommand: npm install
+  nodeVersion: 18
+
+# Environment variables
+environment:
+  # Frontend variables
+  - name: VITE_API_URL
+    value: ${VITE_API_URL}
+    required: true
+    description: URL of the backend API
+
+# Backend configuration (separate deployment)
+backend:
+  type: heroku # or 'render', 'railway', etc.
+  envFile: ./server/.env
+  port: 5000
+  requiredEnvVars:
+    - OPENROUTER_API_KEY
+    - YOUTUBE_API_KEY
+
+# Build settings
+build:
+  nodeVersion: 18
+  installCommand: npm install
+  buildCommand: npm run build
+  outputDirectory: dist
+
+# Deployment settings
+deploy:
+  autoPublish: true
+  productionBranch: main
+  previewDeployment: true
+  environmentVariables:
+    - name: NODE_ENV
+      value: production
+
+# Redirects and routing
+routes:
+  - src: /api/*
+    dest: ${VITE_API_URL}/api/:splat
+    status: 200
+  - src: /*
+    dest: /index.html
+    status: 200

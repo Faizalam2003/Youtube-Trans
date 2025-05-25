@@ -32,3 +32,8 @@ core
 
 .github/
 
+# Environment variables
+.env
+
+# Server node_modules
+server/node_modules
